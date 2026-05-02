@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} - 讀書筆記本{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">我的書單</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ book.title }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <!-- 左側：書籍資訊 -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h3 class="card-title">{{ book.title }}</h3>
+                <h5 class="text-muted mb-4">{{ book.author or '未知作者' }}</h5>
+                
+                <ul class="list-group list-group-flush mb-4">
+                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span class="text-muted">分類</span>
+                        <span class="badge bg-info text-dark">{{ book.category or '未分類' }}</span>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span class="text-muted">閱讀狀態</span>
+                        {% if book.status == 'unread' %}
+                            <span class="badge bg-secondary">未讀</span>
+                        {% elif book.status == 'reading' %}
+                            <span class="badge bg-warning text-dark">閱讀中</span>
+                        {% else %}
+                            <span class="badge bg-success">已完讀</span>
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span class="text-muted">個人評分</span>
+                        <div>
+                            {% if book.rating %}
+                                <span class="text-warning">
+                                    {% for i in range(book.rating) %}★{% endfor %}{% for i in range(5 - book.rating) %}☆{% endfor %}
+                                </span>
+                            {% else %}
+                                <span class="text-muted small">尚未評分</span>
+                            {% endif %}
+                        </div>
+                    </li>
+                    <li class="list-group-item px-0">
+                        <span class="text-muted d-block mb-1">新增時間</span>
+                        <small>{{ book.created_at.strftime('%Y-%m-%d %H:%M') if book.created_at else '無資料' }}</small>
+                    </li>
+                </ul>
+                
+                <div class="d-grid gap-2 mt-auto">
+                    <a href="{{ url_for('main.edit_book', id=book.id) }}" class="btn btn-primary">編輯資訊與撰寫心得</a>
+                    <form action="{{ url_for('main.delete_book', id=book.id) }}" method="POST" onsubmit="return confirm('確定要刪除這本書嗎？相關的心得筆記也會一併消失且無法復原！');">
+                        <button type="submit" class="btn btn-outline-danger w-100">刪除此書籍</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 右側：讀書心得 -->
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white py-3 border-bottom-0">
+                <h5 class="mb-0 text-primary"><i class="bi bi-journal-text"></i> 讀書心得與筆記</h5>
+            </div>
+            <div class="card-body bg-light rounded m-3 mt-0 shadow-inner">
+                {% if book.notes %}
+                    <div style="white-space: pre-wrap; line-height: 1.8;">{{ book.notes }}</div>
+                {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <p class="mb-3">尚未留下任何心得筆記...</p>
+                        <a href="{{ url_for('main.edit_book', id=book.id) }}" class="btn btn-sm btn-outline-primary">馬上開始寫筆記</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}編輯：{{ book.title }} - 讀書筆記本{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">我的書單</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.book_detail', id=book.id) }}">{{ book.title }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">編輯書籍</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3">
+                <h4 class="mb-0 text-primary"><i class="bi bi-pencil-square"></i> 編輯書籍與心得</h4>
+            </div>
+            <div class="card-body p-4">
+                <form action="{{ url_for('main.update_book', id=book.id) }}" method="POST">
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="mb-3 text-secondary border-bottom pb-2">基本資訊</h5>
+                            <div class="mb-3">
+                                <label for="title" class="form-label text-danger">書名 *</label>
+                                <input type="text" class="form-control" id="title" name="title" required value="{{ book.title }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="author" class="form-label">作者</label>
+                                <input type="text" class="form-control" id="author" name="author" value="{{ book.author or '' }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="category" class="form-label">分類</label>
+                                <input type="text" class="form-control" id="category" name="category" value="{{ book.category or '' }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5 class="mb-3 text-secondary border-bottom pb-2">閱讀進度與評價</h5>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">狀態</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="unread" {% if book.status == 'unread' %}selected{% endif %}>未讀</option>
+                                    <option value="reading" {% if book.status == 'reading' %}selected{% endif %}>閱讀中</option>
+                                    <option value="read" {% if book.status == 'read' %}selected{% endif %}>已完讀</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">個人評分</label>
+                                <select class="form-select" id="rating" name="rating">
+                                    <option value="">-- 尚未評分 --</option>
+                                    <option value="1" {% if book.rating == 1 %}selected{% endif %}>1 顆星 ★</option>
+                                    <option value="2" {% if book.rating == 2 %}selected{% endif %}>2 顆星 ★★</option>
+                                    <option value="3" {% if book.rating == 3 %}selected{% endif %}>3 顆星 ★★★</option>
+                                    <option value="4" {% if book.rating == 4 %}selected{% endif %}>4 顆星 ★★★★</option>
+                                    <option value="5" {% if book.rating == 5 %}selected{% endif %}>5 顆星 ★★★★★</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="mb-3 text-secondary border-bottom pb-2">讀書心得與筆記</h5>
+                        <textarea class="form-control bg-light" id="notes" name="notes" rows="12" placeholder="寫下這本書的重點、佳句或是你的深刻感想...">{{ book.notes or '' }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-5 pt-3 border-top">
+                        <a href="{{ url_for('main.book_detail', id=book.id) }}" class="btn btn-outline-secondary px-4">取消返回</a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save"></i> 儲存所有變更</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

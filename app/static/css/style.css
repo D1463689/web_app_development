@@ -1,0 +1,40 @@
+/* 自訂樣式微調 Bootstrap 5 */
+
+body {
+    background-color: #f4f6f9; /* 稍微帶點灰藍的背景色 */
+    font-family: 'Segoe UI', 'Microsoft JhengHei', Tahoma, Geneva, sans-serif;
+}
+
+/* Navbar 微調 */
+.navbar {
+    border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+}
+
+/* 卡片特效：讓列表的卡片有微微浮起的互動感 */
+.card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border-radius: 0.5rem;
+}
+
+/* 僅針對首頁清單的 card hover 特效 */
+.row-cols-md-3 .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 心得筆記區塊內陰影 */
+.shadow-inner {
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+}
+
+/* 調整 textarea 讓它可以垂直拉伸 */
+textarea {
+    resize: vertical;
+    border-radius: 0.5rem;
+}
+
+/* 徽章 (Badge) 圓角微調 */
+.badge {
+    font-weight: 500;
+    padding: 0.4em 0.6em;
+}

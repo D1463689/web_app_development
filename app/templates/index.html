@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}我的書單 - 讀書筆記本{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">我的書單</h2>
+    <a href="{{ url_for('main.new_book') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> 新增書籍
+    </a>
+</div>
+
+{% if books %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for book in books %}
+    <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="card-title text-truncate" title="{{ book.title }}">
+                    <a href="{{ url_for('main.book_detail', id=book.id) }}" class="text-decoration-none text-dark">{{ book.title }}</a>
+                </h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ book.author or '未知作者' }}</h6>
+                <div class="mb-2 mt-3">
+                    {% if book.status == 'unread' %}
+                        <span class="badge bg-secondary">未讀</span>
+                    {% elif book.status == 'reading' %}
+                        <span class="badge bg-warning text-dark">閱讀中</span>
+                    {% else %}
+                        <span class="badge bg-success">已完讀</span>
+                    {% endif %}
+                    
+                    {% if book.category %}
+                        <span class="badge bg-info text-dark">{{ book.category }}</span>
+                    {% endif %}
+                </div>
+                
+                {% if book.rating %}
+                <div class="text-warning mb-2 mt-2">
+                    {% for i in range(book.rating) %}
+                        <i class="bi bi-star-fill"></i>
+                    {% endfor %}
+                    {% for i in range(5 - book.rating) %}
+                        <i class="bi bi-star"></i>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="mb-2 mt-2 text-muted small">尚未評分</div>
+                {% endif %}
+                
+                <p class="card-text text-truncate text-muted small mt-3">
+                    {{ book.notes or '尚未留下心得筆記...' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-top-0 pt-0">
+                <a href="{{ url_for('main.book_detail', id=book.id) }}" class="btn btn-sm btn-outline-primary w-100">查看詳情與筆記</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5 bg-white rounded shadow-sm">
+    <i class="bi bi-journal-x display-1 text-muted mb-3"></i>
+    <h3>書單空空如也</h3>
+    <p class="text-muted">你還沒有新增任何書籍，現在就開始記錄吧！</p>
+    <a href="{{ url_for('main.new_book') }}" class="btn btn-primary mt-2">新增第一本書</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -42,20 +42,35 @@ class Book(db.Model):
     @classmethod
     def create(cls, **kwargs):
         """建立新書籍並儲存到資料庫"""
-        book = cls(**kwargs)
-        db.session.add(book)
-        db.session.commit()
-        return book
+        try:
+            book = cls(**kwargs)
+            db.session.add(book)
+            db.session.commit()
+            return book
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error creating book: {e}")
+            raise e
 
     def update(self, **kwargs):
         """更新書籍屬性並儲存到資料庫"""
-        for key, value in kwargs.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
-        db.session.commit()
-        return self
+        try:
+            for key, value in kwargs.items():
+                if hasattr(self, key):
+                    setattr(self, key, value)
+            db.session.commit()
+            return self
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating book: {e}")
+            raise e
 
     def delete(self):
         """從資料庫刪除此書籍"""
-        db.session.delete(self)
-        db.session.commit()
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error deleting book: {e}")
+            raise e
