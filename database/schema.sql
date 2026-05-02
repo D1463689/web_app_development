@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS books (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255),
+    category VARCHAR(100),
+    status VARCHAR(50) NOT NULL DEFAULT 'unread',
+    rating INTEGER CHECK(rating >= 1 AND rating <= 5),
+    notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
